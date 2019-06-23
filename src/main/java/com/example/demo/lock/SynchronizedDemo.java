@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.lock;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -11,13 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @NotThreadSafe
-public class ConcurrencyTest {
-
+public class SynchronizedDemo {
     private static int count = 0;
-    private static int clientTotal = 5000;
-    private static int threadTotal = 200;
 
     public static void main(String[] args) throws Exception {
+
+        int clientTotal = 5000;
+        int threadTotal = 200;
         ExecutorService exeService = Executors.newCachedThreadPool();
         CountDownLatch countdownlatch = new CountDownLatch(clientTotal);
         Semaphore semaphore = new Semaphore(threadTotal);
@@ -36,10 +36,10 @@ public class ConcurrencyTest {
         }
         countdownlatch.await();
         exeService.shutdown();
-        System.out.println("Count number:" + count);
+        log.info("Count number:{}", count);
     }
 
-    private static void add() {
+    private static synchronized void add() {
         count++;
     }
 

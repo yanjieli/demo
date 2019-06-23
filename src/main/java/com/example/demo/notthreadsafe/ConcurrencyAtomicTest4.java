@@ -14,10 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @NotThreadSafe
-public class ConcurrencyAtomicTest4 { // public static SimpleDateFormat simpleDateFormat = new
+public class ConcurrencyAtomicTest4 {
+    // public static SimpleDateFormat simpleDateFormat = new
     // SimpleDateFormat("yyyymmdd");
-    public static int clientTotal = 5000;
-    public static int threadTotal = 200;
+    private static int clientTotal = 5000;
+    private static int threadTotal = 200;
 
     public static void main(String[] args) throws Exception {
         ExecutorService exeService = Executors.newCachedThreadPool();
@@ -48,6 +49,6 @@ public class ConcurrencyAtomicTest4 { // public static SimpleDateFormat simpleDa
         } catch (ParseException e) {
             log.error(e.getMessage());
         }
-        // log.info("" + date.getTime());
+        log.info("{}", date);
     }
 }

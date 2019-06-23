@@ -1,23 +1,25 @@
-package com.example.demo;
+package com.example.demo.lock;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.StampedLock;
 
-import com.example.demo.annoations.NotThreadSafe;
+import com.example.demo.annoations.ThreadSafe;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@NotThreadSafe
-public class ConcurrencyTest {
-
+@ThreadSafe
+public class ConditionDemo {
     private static int count = 0;
-    private static int clientTotal = 5000;
-    private static int threadTotal = 200;
+    private static StampedLock lock = new StampedLock();
 
     public static void main(String[] args) throws Exception {
+
+        int clientTotal = 5000;
+        int threadTotal = 200;
         ExecutorService exeService = Executors.newCachedThreadPool();
         CountDownLatch countdownlatch = new CountDownLatch(clientTotal);
         Semaphore semaphore = new Semaphore(threadTotal);
@@ -36,11 +38,16 @@ public class ConcurrencyTest {
         }
         countdownlatch.await();
         exeService.shutdown();
-        System.out.println("Count number:" + count);
+        log.info("Count number:{}", count);
     }
 
     private static void add() {
-        count++;
+        long stampId = lock.writeLock();
+        try {
+            count++;
+        } finally {
+            lock.unlock(stampId);
+        }
     }
 
 }

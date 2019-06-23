@@ -46,6 +46,7 @@ public class CollectionExample1 {
 
     private static void updateCount(int i) {
         count++;
+        log.info("{}", i);
     }
 
 }
