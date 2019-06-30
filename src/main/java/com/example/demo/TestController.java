@@ -12,6 +12,11 @@ public class TestController {
     @RequestMapping("/test")
     @ResponseBody
     public String test() {
+        log.info("test");
         return "test";
+    }
+
+    public static void main(String[] args) {
+        log.info("{}", 1 << 30);
     }
 }
